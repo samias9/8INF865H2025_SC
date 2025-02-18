@@ -83,6 +83,7 @@ fun GameScreen(
             onUserGuessChanged = { gameViewModel.updateUserGuess(it) },
             onKeyboardDone = { gameViewModel.checkUserGuess() },
             userGuess = gameViewModel.userGuess,
+            wordCount = gameUiState.currentWordCount,
             currentScrambledWord = gameUiState.currentScrambledWord,
             isGuessWrong = gameUiState.isGuessedWordWrong,
             modifier = Modifier
@@ -110,7 +111,7 @@ fun GameScreen(
             }
 
             OutlinedButton(
-                onClick = { },
+                onClick = { gameViewModel.skipWord() },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
@@ -120,8 +121,7 @@ fun GameScreen(
             }
         }
 
-        GameStatus(score = 0, modifier = Modifier.padding(20.dp))
-    }
+        GameStatus(score = gameUiState.score, modifier = Modifier.padding(20.dp))    }
 }
 
 @Composable
@@ -145,7 +145,8 @@ fun GameLayout(
     onKeyboardDone: () -> Unit,
     currentScrambledWord: String,
     modifier: Modifier = Modifier,
-) {
+    wordCount: Int,
+    ) {
     val mediumPadding = dimensionResource(R.dimen.padding_medium)
 
     Card(
@@ -163,10 +164,10 @@ fun GameLayout(
                     .background(colorScheme.surfaceTint)
                     .padding(horizontal = 10.dp, vertical = 4.dp)
                     .align(alignment = Alignment.End),
-                text = stringResource(R.string.word_count, 0),
                 style = typography.titleMedium,
-                color = colorScheme.onPrimary
-            )
+                color = colorScheme.onPrimary,
+                text = stringResource(R.string.word_count, wordCount)
+                )
             Text(
                 text = "scrambleun",
                 style = typography.displayMedium
