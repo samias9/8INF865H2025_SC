@@ -122,6 +122,12 @@ fun GameScreen(
         }
 
         GameStatus(score = gameUiState.score, modifier = Modifier.padding(20.dp))    }
+    if (gameUiState.isGameOver) {
+        FinalScoreDialog(
+            score = gameUiState.score,
+            onPlayAgain = { gameViewModel.resetGame() }
+        )
+    }
 }
 
 @Composable
@@ -226,10 +232,10 @@ private fun FinalScoreDialog(
         onDismissRequest = {
             // Dismiss the dialog when the user clicks outside the dialog or on the back
             // button. If you want to disable that functionality, simply use an empty
-            // onCloseRequest.
+            // onDismissRequest.
         },
-        title = { Text(text = stringResource(R.string.congratulations)) },
-        text = { Text(text = stringResource(R.string.you_scored, score)) },
+        title = { Text(stringResource(R.string.congratulations)) },
+        text = { Text(stringResource(R.string.you_scored, score)) },
         modifier = modifier,
         dismissButton = {
             TextButton(
@@ -241,7 +247,11 @@ private fun FinalScoreDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = onPlayAgain) {
+            TextButton(
+                onClick = {
+                    onPlayAgain()
+                }
+            ) {
                 Text(text = stringResource(R.string.play_again))
             }
         }
